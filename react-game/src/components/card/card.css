@@ -1,0 +1,39 @@
+.card {
+  perspective: 1000px;
+  transition: all 0.2s;
+  margin: 5px 10px 10px 10px;
+  border-radius: 19px;
+}
+
+.card__wrapper {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  position: relative;
+  transition: 1s cubic-bezier(0.38, 0.02, 0.09, 1.66) all;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.card__side_back,
+.card__side_front {
+  backface-visibility: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 19px;
+  overflow: hidden;
+}
+
+.card__side_back {
+  transition: 0.3s ease all;
+}
+
+.card__side_front {
+  transform: rotateY(180deg);
+}
