@@ -32,7 +32,3 @@ body {
   align-items: center;
   justify-content: center;
 }
-
-.fullscreen-enabled .my-component {
-  background: linear-gradient(to bottom, #0a081d, #191638, #151527);
-}

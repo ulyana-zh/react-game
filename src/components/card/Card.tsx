@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import "./card.css";
 
 export interface CardPreset {
@@ -13,27 +13,18 @@ export interface CardPreset {
   solved: boolean;
 }
 
-const Card: FC<CardPreset> = ({
-  disabled,
-  width,
-  height,
-  id,
-  type,
-  flipped,
-  solved,
-  handleClick,
-}) => {
+const Card: FC<CardPreset> = (props: any) => {
   return (
     <div
       className="card"
       style={{
-        width: width,
-        height: height,
+        width: props.width,
+        height: props.height,
       }}
     >
       <div
-        className={`card__wrapper ${flipped || solved ? "flipped" : ""}`}
-        onClick={() => (disabled ? null : handleClick(id))}
+        className={`card__wrapper ${props.flipped || props.solved ? "flipped" : ""}`}
+        onClick={() => (props.disabled ? null : props.handleClick(props.id))}
       > 
         <img
           className={"card__side_back"}
@@ -42,7 +33,7 @@ const Card: FC<CardPreset> = ({
         />
         <img
           className={"card__side_front"}
-          src={`assets/images/${type}.jpg`}
+          src={`assets/images/${props.type}.jpg`}
           alt="card"
         />
       </div>

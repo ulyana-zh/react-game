@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import useSound from "use-sound";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import "./index.css";
@@ -14,7 +14,6 @@ import Win from "./components/win/Win";
 function App() {
   const handle = useFullScreenHandle();
   const buttonSoundUrl = "assets/sounds/Bulle.wav";
-
   const [cards, setCards] = useState<any>([]);
   const [flipped, setFlipped] = useState<number[]>([]);
   const [size, setSize] = useState(0);

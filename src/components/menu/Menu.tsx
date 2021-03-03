@@ -5,7 +5,6 @@ import SoundSlider from './SoundSlider';
 const ModalWindow: any = () => {
     return (
         <div className="modal-window">
-            Congrats!
             <SoundSlider />
         </div>
     )
