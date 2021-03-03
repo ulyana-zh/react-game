@@ -20,6 +20,7 @@ const Card: FC<CardPreset> = ({
   id,
   type,
   flipped,
+  solved,
   handleClick,
 }) => {
   return (
@@ -31,17 +32,17 @@ const Card: FC<CardPreset> = ({
       }}
     >
       <div
-        className={`card__wrapper ${flipped ? "flipped" : ""}`}
+        className={`card__wrapper ${flipped || solved ? "flipped" : ""}`}
         onClick={() => (disabled ? null : handleClick(id))}
-      >
+      > 
         <img
           className={"card__side_back"}
-          src={"assets/images/back.png"}
+          src={"assets/images/1.png"}
           alt="card"
         />
         <img
           className={"card__side_front"}
-          src={"assets/images/front.png"}
+          src={`assets/images/${type}.jpg`}
           alt="card"
         />
       </div>

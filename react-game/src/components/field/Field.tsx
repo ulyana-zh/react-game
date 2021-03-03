@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Card, { CardPreset } from "../card/Card";
 import "./field.css";
 
@@ -9,6 +9,7 @@ export interface FieldPreset {
   handleClick: (id: number) => void;
   disabled: boolean;
   solved: number[];
+  isStart: boolean;
 }
 
 const Field: FC<FieldPreset> = ({
@@ -18,7 +19,16 @@ const Field: FC<FieldPreset> = ({
   handleClick,
   disabled,
   solved,
+  isStart,
 }) => {
+  const [startFlip, setStartFlip] = useState<any>(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStartFlip(false); 
+    }, 2000) 
+  }, []);
+
   return (
     <div className="field">
       {cards.map((card: CardPreset) => (
@@ -26,9 +36,9 @@ const Field: FC<FieldPreset> = ({
           id={card.id}
           key={card.id}
           type={card.type}
-          width={size / 5.5}
-          height={size / 5.5}
-          flipped={flipped.includes(card.id)}
+          width={size / 6.5}
+          height={size / 6.5}
+          flipped={isStart || startFlip || flipped.includes(card.id)}
           handleClick={handleClick}
           disabled={disabled || solved.includes(card.id)}
           solved={solved.includes(card.id)}

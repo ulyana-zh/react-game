@@ -1,7 +1,7 @@
 .card {
   perspective: 1000px;
   transition: all 0.2s;
-  margin: 5px 10px 10px 10px;
+  margin: 3px 6px 6px 6px;
   border-radius: 19px;
 }
 
@@ -10,7 +10,7 @@
   height: 100%;
   transform-style: preserve-3d;
   position: relative;
-  transition: 1s cubic-bezier(0.38, 0.02, 0.09, 1.66) all;
+  transition: 0.7s cubic-bezier(0.38, 0.02, 0.09, 1.66) all;
 }
 
 .flipped {
@@ -32,8 +32,14 @@
 
 .card__side_back {
   transition: 0.3s ease all;
+  cursor: pointer;
 }
 
 .card__side_front {
   transform: rotateY(180deg);
+}
+
+.card__side_back:hover,
+.card__side_front:hover {
+  box-shadow: 0 0 10px rgb(14, 4, 94)
 }
