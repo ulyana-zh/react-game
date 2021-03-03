@@ -14,6 +14,15 @@ code {
     monospace;
 }
 
+.wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center; 
+  background: linear-gradient(to bottom, #0a081d, #191638, #151527);
+}
+
 .game {
   width: 100%;
   height: 100%;
@@ -24,6 +33,7 @@ code {
 }
 
 .game__field {
+  width: fit-content;
   height: 90%;
   display: flex;
   flex-direction: column;
@@ -32,4 +42,16 @@ code {
 
 .controls {
   margin-bottom: 20px;
+}
+
+.controls>* {
+  margin-left: 5px;
+}
+
+.my-component {
+  background: rgb(226, 16, 16);
+}
+
+.fullscreen-enabled .my-component {
+  background: rgb(199, 13, 13);
 }

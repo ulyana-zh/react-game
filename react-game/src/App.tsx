@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import useSound from "use-sound";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import "./index.css";
 import Button from "@material-ui/core/Button";
 import Footer from "./components/footer/Footer";
@@ -11,6 +12,7 @@ import Menu from "./components/menu/Menu";
 import Win from "./components/win/Win";
 
 function App() {
+  const handle = useFullScreenHandle();
   const buttonSoundUrl = "assets/sounds/Bulle.wav";
 
   const [cards, setCards] = useState<any>([]);
@@ -104,40 +106,50 @@ function App() {
 
   return (
     <div className="game">
-      <div className="game__field">
-        <div className="controls">
-          <Button
-            onClick={handleClickMenuButton}
-            variant="contained"
-            color="primary"
-          >
-            Menu
-          </Button>
-          <Button
-            onClick={handleClickNewGame}
-            variant="contained"
-            color="primary"
-          >
-            New Game
-          </Button>
-          <span>Moves: {moves}</span>
+      <FullScreen handle={handle}>
+        <div className="wrapper">
+          <div className="game__field">
+            <div className="controls">
+              <Button
+                onClick={handleClickMenuButton}
+                variant="contained"
+                color="primary"
+              >
+                Menu
+              </Button>
+              <Button
+                onClick={handleClickNewGame}
+                variant="contained"
+                color="primary"
+              >
+                New Game
+              </Button>
+              <Button
+                onClick={handle.enter}
+                variant="contained"
+                color="primary"
+              >
+                FullScreen
+              </Button>
+              <span>Moves: {moves}</span>
+            </div>
+            <div className="field__container">
+              {isMenu && <Menu />}
+              {solved.length === 16 && <Win />}
+              <Field
+                size={size}
+                cards={cards}
+                flipped={flipped}
+                handleClick={handleClick}
+                disabled={disabled}
+                solved={solved}
+                isStart={isStart}
+              />
+            </div>
+          </div>
+          <Footer />
         </div>
-        <div className="field__container">
-          {isMenu && <Menu />}
-          {solved.length === 16 && <Win />}
-          <Field
-            size={size}
-            cards={cards}
-            flipped={flipped}
-            handleClick={handleClick}
-            disabled={disabled}
-            solved={solved}
-            isStart={isStart}
-          />
-        </div>
-      </div>
-
-      <Footer />
+      </FullScreen>
     </div>
   );
 }
