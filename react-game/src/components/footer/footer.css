@@ -1,0 +1,23 @@
+.footer {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.footer>* {
+  margin: 0 10px;
+}
+
+.logo__rsschool {
+  width: 70px;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
