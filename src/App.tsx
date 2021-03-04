@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-const useSound = require("use-sound");
-//import useSound from "use-sound";
+import useSound from "use-sound";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import "./index.css";
 import Button from "@material-ui/core/Button";
 import Footer from "./components/footer/Footer";
-
+import { HotKeys } from "react-hotkeys";
 import Field from "./components/field/Field";
 import initCards from "./cards";
 import { CardPreset } from "./components/card/Card";
@@ -29,10 +28,9 @@ function App() {
   const [soundValue, setSoundValue] = useState<number>(50);
   const [soundVolume, setSoundVolume] = useState(0.5);
   const [musicVolume, setMusicVolume] = useState(0);
-  const [playbackRate, setPlaybackRate] = useState(1);
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [play] = useSound(buttonSoundUrl, { volume: soundVolume });
-  const [playMusic ] = useSound(musicUrl, { volume: musicVolume, loop: true });
+  const [playMusic] = useSound(musicUrl, { volume: musicVolume});
 
   const handleChangeMusicValue = (event: any, newValue: any) => {
     setMusicValue(newValue);
@@ -40,7 +38,7 @@ function App() {
   };
 
   const handleChangeSoundValue = (event: any, newValue: any) => {
-    setSoundValue(newValue)
+    setSoundValue(newValue);
     setSoundVolume(newValue / 100);
   };
 
@@ -53,6 +51,36 @@ function App() {
     window.addEventListener("resize", resizeField);
     return () => window.removeEventListener("resize", resizeField);
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("keypress", handleKeyPress);
+    return () => window.removeEventListener("keypress", handleKeyPress);
+  });
+
+  const handleKeyPress = (event: any) => {
+    if (event.key === "1") {
+      setMenu(!isMenu);
+    }
+    if (event.key === "2") {
+      handleClickNewGame();
+    }
+    if (event.key === "3") {
+      handle.enter();
+    }
+    if (event.key === "s") {
+      handleChangeSoundValue(event, 0);
+      handleChangeMusicValue(event, 0);
+    }
+    if (event.key === "w") {
+      handleChangeSoundValue(event, 50);
+      handleChangeMusicValue(event, 50);
+      if (!isMusicOn) {
+        playMusic();
+        setIsMusicOn(true);
+      }
+    }
+  };
+
 
   useEffect(() => {
     if (solved.length === 16) {
@@ -97,10 +125,10 @@ function App() {
 
   const handleClickMenuButton = () => {
     setMenu(!isMenu);
-    if(!isMusicOn) {
+    if (!isMusicOn) {
       playMusic();
+      setIsMusicOn(true);
     }
-    setIsMusicOn(true);
   };
 
   const flipCard = () => {
@@ -155,12 +183,14 @@ function App() {
               <span>Moves: {moves}</span>
             </div>
             <div className="field__container">
-              {isMenu && 
-              <Menu 
-              musicValue={musicValue} 
-              soundValue={soundValue}
-              handleChangeMusicValue={handleChangeMusicValue}
-              handleChangeSoundValue={handleChangeSoundValue}/>}
+              {isMenu && (
+                <Menu
+                  musicValue={musicValue}
+                  soundValue={soundValue}
+                  handleChangeMusicValue={handleChangeMusicValue}
+                  handleChangeSoundValue={handleChangeSoundValue}
+                />
+              )}
               {solved.length === 16 && <Win />}
               <Field
                 size={size}
