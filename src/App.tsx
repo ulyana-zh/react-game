@@ -14,20 +14,37 @@ import Win from "./components/win/Win";
 function App() {
   const handle = useFullScreenHandle();
   const buttonSoundUrl = "assets/sounds/Bulle.wav";
+  const musicUrl = "assets/sounds/music.mp3";
+
   const [cards, setCards] = useState<any>([]);
-  const [flipped, setFlipped] = useState<number[]>([]);
   const [size, setSize] = useState(0);
+  const [flipped, setFlipped] = useState<number[]>([]);
   const [solved, setSolved] = useState<number[]>([]);
   const [disabled, setDisabled] = useState(false);
   const [isStart, setIsStart] = useState(false);
-  const [volume, setVolume] = useState(0.5);
   const [isMenu, setMenu] = useState(false);
   const [moves, setMoves] = useState(0);
-  const [play] = useSound(buttonSoundUrl, { volume: 0.9 });
+  const [musicValue, setMusicValue] = useState<number>(0);
+  const [soundValue, setSoundValue] = useState<number>(50);
+  const [soundVolume, setSoundVolume] = useState(0.5);
+  const [musicVolume, setMusicVolume] = useState(0);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [isMusicOn, setIsMusicOn] = useState(false);
+  const [play] = useSound(buttonSoundUrl, { volume: soundVolume });
+  const [playMusic ] = useSound(musicUrl, { volume: musicVolume, loop: true });
+
+  const handleChangeMusicValue = (event: any, newValue: any) => {
+    setMusicValue(newValue);
+    setMusicVolume(newValue / 100);
+  };
+
+  const handleChangeSoundValue = (event: any, newValue: any) => {
+    setSoundValue(newValue)
+    setSoundVolume(newValue / 100);
+  };
 
   useEffect(() => {
     resizeField();
-    setVolume(volume);
     setCards(initCards());
   }, []);
 
@@ -79,6 +96,10 @@ function App() {
 
   const handleClickMenuButton = () => {
     setMenu(!isMenu);
+    if(!isMusicOn) {
+      playMusic();
+    }
+    setIsMusicOn(true);
   };
 
   const flipCard = () => {
@@ -133,7 +154,12 @@ function App() {
               <span>Moves: {moves}</span>
             </div>
             <div className="field__container">
-              {isMenu && <Menu />}
+              {isMenu && 
+              <Menu 
+              musicValue={musicValue} 
+              soundValue={soundValue}
+              handleChangeMusicValue={handleChangeMusicValue}
+              handleChangeSoundValue={handleChangeSoundValue}/>}
               {solved.length === 16 && <Win />}
               <Field
                 size={size}

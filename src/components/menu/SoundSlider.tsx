@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import VolumeDown from '@material-ui/icons/VolumeDown';
 import VolumeUp from '@material-ui/icons/VolumeUp';
-import useSound from 'use-sound';
 
 const useStyles = makeStyles({
   root: {
@@ -13,28 +12,20 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SoundSlider(): any {
-  const buttonSoundUrl = 'assets/sounds/Bulle.wav'
+export default function SoundSlider(props: any): any {
   const classes = useStyles();
-  const [value, setValue] = React.useState<number>(100);
-  const [play] = useSound(buttonSoundUrl, { volume: value / 100 });
-
-  const handleChange = (event: any, newValue: any) => {
-    setValue(newValue);
-    //valueLevel = newValue;
-  };
 
   return (
     <div className={classes.root}>
       <Typography id="continuous-slider" gutterBottom>
-        Volume
+        {`${props.type} Volume`}
       </Typography>
       <Grid container spacing={2}>
         <Grid item>
           <VolumeDown />
         </Grid>
         <Grid item xs>
-          <Slider value={value} onChange={handleChange} aria-labelledby="continuous-slider" />
+          <Slider value={props.value} onChange={props.handleChange} aria-labelledby="continuous-slider" />
         </Grid>
         <Grid item>
           <VolumeUp />

@@ -22,8 +22,6 @@ const Field: FC<FieldPreset> = ({
   isStart,
 }) => {
   const [startFlip, setStartFlip] = useState<any>(true);
-  const [allCards, setCards] = useState<any>([]);
-  const [isFlip, setFlip] = useState<any>(false);
 
   useEffect(() => {
     
