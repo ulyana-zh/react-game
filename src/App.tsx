@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import useSound from "use-sound";
+const useSound = require("use-sound");
+//import useSound from "use-sound";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import "./index.css";
 import Button from "@material-ui/core/Button";
