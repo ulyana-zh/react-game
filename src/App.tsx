@@ -40,8 +40,7 @@ function App() {
 
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [play] = useSound(buttonSoundUrl, { volume: soundVolume });
-  //const [playMusic] = useSound(musicUrl, { volume: musicVolume });
-  const [playMusic] = useSound(musicUrl, { volume: musicVolume, loop: true });
+  const [playMusic] = useSound(musicUrl, { volume: musicVolume });
   const [background, setBackground] = useStickyState(
     "linear-gradient(to bottom, #0a081d, #191638, #151527')",
     "background"
