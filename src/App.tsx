@@ -13,9 +13,7 @@ import Win from "./components/win/Win";
 export function useStickyState(defaultValue: any, key: any) {
   const [value, setValue] = React.useState(() => {
     const stickyValue = window.localStorage.getItem(key);
-    return stickyValue !== null
-      ? JSON.parse(stickyValue)
-      : defaultValue;
+    return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue;
   });
   React.useEffect(() => {
     window.localStorage.setItem(key, JSON.stringify(value));
@@ -24,31 +22,37 @@ export function useStickyState(defaultValue: any, key: any) {
 }
 
 function App() {
+  const initialStateCarts = initCards();
   const handle = useFullScreenHandle();
   const buttonSoundUrl = "assets/sounds/Bulle.wav";
   const musicUrl = "assets/sounds/music.mp3";
   const [size, setSize] = useState(0);
-  const [flipped, setFlipped] = useStickyState([], 'flipped');
-  const [solved, setSolved] = useStickyState([], 'solved');
+  const [flipped, setFlipped] = useStickyState([], "flipped");
+  const [solved, setSolved] = useStickyState([], "solved");
   const [disabled, setDisabled] = useState(false);
   const [isStart, setIsStart] = useState(false);
   const [isMenu, setMenu] = useState(false);
 
-  const [musicValue, setMusicValue] = useStickyState(0, 'musicValue');
-  const [soundValue, setSoundValue] = useStickyState(50, 'soundValue');
-  const [soundVolume, setSoundVolume] = useStickyState(0.5, 'soundVolume');
-  const [musicVolume, setMusicVolume] = useStickyState(0.5, 'musicVolume');
+  const [musicValue, setMusicValue] = useStickyState(0, "musicValue");
+  const [soundValue, setSoundValue] = useStickyState(50, "soundValue");
+  const [soundVolume, setSoundVolume] = useStickyState(0.5, "soundVolume");
+  const [musicVolume, setMusicVolume] = useStickyState(0.5, "musicVolume");
 
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [play] = useSound(buttonSoundUrl, { volume: soundVolume });
-  const [playMusic] = useSound(musicUrl, { volume: musicVolume });
-  //const [playMusic] = useSound(musicUrl, { volume: musicVolume, loop: true });
-  const [background, setBackground] = useStickyState("linear-gradient(to bottom, #0a081d, #191638, #151527')", 'background');
-  const [cardsImage, setCardsImage] = useStickyState("assets/images/1.png", 'cardsImage');
-  const [set, setSet] = useStickyState("set1", 'cardsSet');
+  //const [playMusic] = useSound(musicUrl, { volume: musicVolume });
+  const [playMusic] = useSound(musicUrl, { volume: musicVolume, loop: true });
+  const [background, setBackground] = useStickyState(
+    "linear-gradient(to bottom, #0a081d, #191638, #151527')",
+    "background"
+  );
+  const [cardsImage, setCardsImage] = useStickyState(
+    "assets/images/1.png",
+    "cardsImage"
+  );
+  const [set, setSet] = useStickyState("set1", "cardsSet");
   const [moves, setMoves] = useStickyState(0, "moves");
-  const [cards, setCards] = useStickyState([], 'cards');
-
+  const [cards, setCards] = useStickyState(initialStateCarts, "cards");
 
   const handleChangeMusicValue = (event: any, newValue: any) => {
     setMusicValue(newValue);
@@ -94,7 +98,7 @@ function App() {
   useEffect(() => {
     resizeField();
     setCards(cards);
-    document.body.style.background=background;
+    document.body.style.background = background;
   });
 
   useEffect(() => {
