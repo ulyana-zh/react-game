@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import "./card.css";
 
 export interface CardPreset {
@@ -11,6 +11,8 @@ export interface CardPreset {
   handleClick: (id: number) => void;
   disabled: boolean;
   solved: boolean;
+  cardSideBackImage: string;
+  set: string;
 }
 
 const Card: FC<CardPreset> = (props: any) => {
@@ -28,12 +30,12 @@ const Card: FC<CardPreset> = (props: any) => {
       > 
         <img
           className={"card__side_back"}
-          src={"assets/images/1.png"}
+          src={props.cardSideBackImage}
           alt="card"
         />
         <img
           className={"card__side_front"}
-          src={`assets/images/${props.type}.jpg`}
+          src={`assets/images/${props.set}/${props.type}.jpg`}
           alt="card"
         />
       </div>

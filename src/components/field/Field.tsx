@@ -10,6 +10,8 @@ export interface FieldPreset {
   disabled: boolean;
   solved: number[];
   isStart: boolean;
+  cardSideBackImage: string;
+  set: string;
 }
 
 const Field: FC<FieldPreset> = ({
@@ -20,6 +22,8 @@ const Field: FC<FieldPreset> = ({
   disabled,
   solved,
   isStart,
+  cardSideBackImage,
+  set
 }) => {
   const [startFlip, setStartFlip] = useState<any>(true);
 
@@ -43,6 +47,8 @@ const Field: FC<FieldPreset> = ({
           handleClick={handleClick}
           disabled={disabled || solved.includes(card.id)}
           solved={solved.includes(card.id)}
+          cardSideBackImage={cardSideBackImage}
+          set={set}
         />
       ))}
     </div>

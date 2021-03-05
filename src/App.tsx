@@ -4,7 +4,6 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import "./index.css";
 import Button from "@material-ui/core/Button";
 import Footer from "./components/footer/Footer";
-import { HotKeys } from "react-hotkeys";
 import Field from "./components/field/Field";
 import initCards from "./cards";
 import { CardPreset } from "./components/card/Card";
@@ -30,7 +29,14 @@ function App() {
   const [musicVolume, setMusicVolume] = useState(0);
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [play] = useSound(buttonSoundUrl, { volume: soundVolume });
-  const [playMusic] = useSound(musicUrl, { volume: musicVolume});
+  const [playMusic] = useSound(musicUrl, { volume: musicVolume });
+  //const [playMusic] = useSound(musicUrl, { volume: musicVolume, loop: true });
+  const [background, setBackground] = useState(() => {
+    document.body.style.background =
+      "linear-gradient(to bottom, #0a081d, #191638, #151527)";
+  });
+  const [cardsImage, setCardsImage] = useState("assets/images/1.png");
+  const [set, setSet] = useState("set1");
 
   const handleChangeMusicValue = (event: any, newValue: any) => {
     setMusicValue(newValue);
@@ -40,6 +46,46 @@ function App() {
   const handleChangeSoundValue = (event: any, newValue: any) => {
     setSoundValue(newValue);
     setSoundVolume(newValue / 100);
+  };
+
+  const handleChangeBackground = (event: any) => {
+    if (event.currentTarget.value === "blue") {
+      setBackground(() => {
+        document.body.style.background =
+          "linear-gradient(to bottom, #0a081d, #191638, #151527)";
+      });
+    }
+    if (event.currentTarget.value === "red") {
+      setBackground(() => {
+        document.body.style.background =
+          "linear-gradient(to right, #41295a, #2f0743)";
+      });
+    }
+    if (event.currentTarget.value === "yellow") {
+      setBackground(() => {
+        document.body.style.background =
+          "linear-gradient(to right, #6441a5, #2a0845)";
+      });
+    }
+  };
+
+  const handleCardsChoose = (event: any) => {
+    if (event.currentTarget.value === "neon") {
+      setCardsImage("assets/images/react.jpg");
+    }
+    if (event.currentTarget.value === "react") {
+      setCardsImage("assets/images/1.png");
+    }
+  };
+
+  const handleCardsSetChoose = (event: any) => {
+    if (event.currentTarget.value === "space") {
+      setBackground(background);
+      setSet("set1");
+    }
+    if (event.currentTarget.value === "fruits") {
+      setSet("set2");
+    }
   };
 
   useEffect(() => {
@@ -81,12 +127,11 @@ function App() {
     }
   };
 
-
   useEffect(() => {
     if (solved.length === 16) {
       setIsStart(false);
     }
-  });
+  }, [solved.length]);
 
   const handleClick = (id: number) => {
     setDisabled(true);
@@ -145,12 +190,21 @@ function App() {
   };
 
   const resizeField = () => {
-    setSize(
-      Math.min(
-        document.documentElement.clientWidth,
-        document.documentElement.clientHeight
-      )
-    );
+    if (document.documentElement.clientWidth < 570) {
+      setSize(
+        Math.min(
+          document.documentElement.clientWidth * 1.3,
+          document.documentElement.clientHeight * 1.3
+        )
+      );
+    } else {
+      setSize(
+        Math.min(
+          document.documentElement.clientWidth,
+          document.documentElement.clientHeight
+        )
+      );
+    }
   };
 
   return (
@@ -189,6 +243,9 @@ function App() {
                   soundValue={soundValue}
                   handleChangeMusicValue={handleChangeMusicValue}
                   handleChangeSoundValue={handleChangeSoundValue}
+                  handleChange={handleChangeBackground}
+                  handleCardsChoose={handleCardsChoose}
+                  handleCardsSetChoose={handleCardsSetChoose}
                 />
               )}
               {solved.length === 16 && <Win />}
@@ -200,8 +257,17 @@ function App() {
                 disabled={disabled}
                 solved={solved}
                 isStart={isStart}
+                cardSideBackImage={cardsImage}
+                set={set}
               />
             </div>
+            <p className="keys">
+              Hot Keys: <br />
+              1 - Menu <br />
+              2 - New Game <br />
+              3 - Full Screen <br />
+              w - Sound and Music on <br />s - Sound and Music off
+            </p>
           </div>
           <Footer />
         </div>
