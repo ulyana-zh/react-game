@@ -10,33 +10,45 @@ import { CardPreset } from "./components/card/Card";
 import Menu from "./components/menu/Menu";
 import Win from "./components/win/Win";
 
+export function useStickyState(defaultValue: any, key: any) {
+  const [value, setValue] = React.useState(() => {
+    const stickyValue = window.localStorage.getItem(key);
+    return stickyValue !== null
+      ? JSON.parse(stickyValue)
+      : defaultValue;
+  });
+  React.useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+  return [value, setValue];
+}
+
 function App() {
   const handle = useFullScreenHandle();
   const buttonSoundUrl = "assets/sounds/Bulle.wav";
   const musicUrl = "assets/sounds/music.mp3";
-
-  const [cards, setCards] = useState<any>([]);
   const [size, setSize] = useState(0);
-  const [flipped, setFlipped] = useState<number[]>([]);
-  const [solved, setSolved] = useState<number[]>([]);
+  const [flipped, setFlipped] = useStickyState([], 'flipped');
+  const [solved, setSolved] = useStickyState([], 'solved');
   const [disabled, setDisabled] = useState(false);
   const [isStart, setIsStart] = useState(false);
   const [isMenu, setMenu] = useState(false);
-  const [moves, setMoves] = useState(0);
-  const [musicValue, setMusicValue] = useState<number>(0);
-  const [soundValue, setSoundValue] = useState<number>(50);
-  const [soundVolume, setSoundVolume] = useState(0.5);
-  const [musicVolume, setMusicVolume] = useState(0);
+
+  const [musicValue, setMusicValue] = useStickyState(0, 'musicValue');
+  const [soundValue, setSoundValue] = useStickyState(50, 'soundValue');
+  const [soundVolume, setSoundVolume] = useStickyState(0.5, 'soundVolume');
+  const [musicVolume, setMusicVolume] = useStickyState(0.5, 'musicVolume');
+
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [play] = useSound(buttonSoundUrl, { volume: soundVolume });
   const [playMusic] = useSound(musicUrl, { volume: musicVolume });
   //const [playMusic] = useSound(musicUrl, { volume: musicVolume, loop: true });
-  const [background, setBackground] = useState(() => {
-    document.body.style.background =
-      "linear-gradient(to bottom, #0a081d, #191638, #151527)";
-  });
-  const [cardsImage, setCardsImage] = useState("assets/images/1.png");
-  const [set, setSet] = useState("set1");
+  const [background, setBackground] = useStickyState("linear-gradient(to bottom, #0a081d, #191638, #151527')", 'background');
+  const [cardsImage, setCardsImage] = useStickyState("assets/images/1.png", 'cardsImage');
+  const [set, setSet] = useStickyState("set1", 'cardsSet');
+  const [moves, setMoves] = useStickyState(0, "moves");
+  const [cards, setCards] = useStickyState([], 'cards');
+
 
   const handleChangeMusicValue = (event: any, newValue: any) => {
     setMusicValue(newValue);
@@ -50,22 +62,13 @@ function App() {
 
   const handleChangeBackground = (event: any) => {
     if (event.currentTarget.value === "blue") {
-      setBackground(() => {
-        document.body.style.background =
-          "linear-gradient(to bottom, #0a081d, #191638, #151527)";
-      });
+      setBackground("linear-gradient(to bottom, #0a081d, #191638, #151527)");
     }
     if (event.currentTarget.value === "red") {
-      setBackground(() => {
-        document.body.style.background =
-          "linear-gradient(to right, #41295a, #2f0743)";
-      });
+      setBackground("linear-gradient(to right, #41295a, #2f0743)");
     }
     if (event.currentTarget.value === "yellow") {
-      setBackground(() => {
-        document.body.style.background =
-          "linear-gradient(to right, #6441a5, #2a0845)";
-      });
+      setBackground("linear-gradient(to right, #6441a5, #2a0845)");
     }
   };
 
@@ -90,8 +93,9 @@ function App() {
 
   useEffect(() => {
     resizeField();
-    setCards(initCards());
-  }, []);
+    setCards(cards);
+    document.body.style.background=background;
+  });
 
   useEffect(() => {
     window.addEventListener("resize", resizeField);
@@ -99,31 +103,27 @@ function App() {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("keypress", handleKeyPress);
-    return () => window.removeEventListener("keypress", handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   });
 
   const handleKeyPress = (event: any) => {
-    if (event.key === "1") {
+    if (event.code === "KeyZ" && event.ctrlKey) {
       setMenu(!isMenu);
     }
-    if (event.key === "2") {
+    if (event.code === "KeyX" && event.ctrlKey) {
       handleClickNewGame();
     }
-    if (event.key === "3") {
+    if (event.code === "KeyC" && event.ctrlKey) {
       handle.enter();
     }
-    if (event.key === "s") {
+    if (event.code === "KeyV" && event.ctrlKey) {
       handleChangeSoundValue(event, 0);
       handleChangeMusicValue(event, 0);
     }
-    if (event.key === "w") {
+    if (event.code === "KeyB" && event.ctrlKey) {
       handleChangeSoundValue(event, 50);
       handleChangeMusicValue(event, 50);
-      if (!isMusicOn) {
-        playMusic();
-        setIsMusicOn(true);
-      }
     }
   };
 
@@ -263,10 +263,12 @@ function App() {
             </div>
             <p className="keys">
               Hot Keys: <br />
-              1 - Menu <br />
-              2 - New Game <br />
-              3 - Full Screen <br />
-              w - Sound and Music on <br />s - Sound and Music off
+              <br />
+              Ctrl+Z - Menu <br />
+              Ctrl+X - New Game <br />
+              Ctrl+C - Full Screen <br />
+              Ctrl+V - Sound and Music on <br />
+              Ctrl+B - Sound and Music off
             </p>
           </div>
           <Footer />
