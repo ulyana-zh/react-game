@@ -1,6 +1,6 @@
 # react-game
 
-Демо: []()
+Демо: [https://ulyana-zh-react-game.netlify.app/](https://ulyana-zh-react-game.netlify.app/)
 
 Для запуска игры:
 
