@@ -32,7 +32,6 @@ function App() {
   const [disabled, setDisabled] = useState(false);
   const [isStart, setIsStart] = useState(false);
   const [isMenu, setMenu] = useState(false);
-
   const [musicValue, setMusicValue] = useStickyState(0, "musicValue");
   const [soundValue, setSoundValue] = useStickyState(50, "soundValue");
   const [soundVolume, setSoundVolume] = useStickyState(0.5, "soundVolume");
@@ -52,6 +51,13 @@ function App() {
   const [set, setSet] = useStickyState("set1", "cardsSet");
   const [moves, setMoves] = useStickyState(0, "moves");
   const [cards, setCards] = useStickyState(initialStateCarts, "cards");
+  const [seconds, setSeconds] = useStickyState(0, "seconds");
+  let hours: any = Math.floor((seconds / 3600) % 24);
+  let min: any = Math.floor((seconds / 60) % 60);
+  let sec: any = Math.floor(seconds % 60);
+  if (sec.toString().length === 1) sec = `0${sec}`;
+  if (min.toString().length === 1) min = `0${min}`;
+  if (hours.toString().length === 1) hours = `0${hours}`;
 
   const handleChangeMusicValue = (event: any, newValue: any) => {
     setMusicValue(newValue);
@@ -99,6 +105,11 @@ function App() {
     setCards(cards);
     document.body.style.background = background;
   });
+
+  useEffect(() => {
+    let timer = setTimeout(() => setSeconds(seconds + 1), 1000);
+    return () => clearTimeout(timer);
+  }, [seconds]);
 
   useEffect(() => {
     window.addEventListener("resize", resizeField);
@@ -161,6 +172,7 @@ function App() {
   const handleClickNewGame = () => {
     setCards(initCards());
     setMoves(0);
+    setSeconds(0);
     setDisabled(false);
     setFlipped([]);
     setSolved([]);
@@ -216,28 +228,38 @@ function App() {
         <div className="wrapper">
           <div className="game__field">
             <div className="controls">
-              <Button
-                onClick={handleClickMenuButton}
-                variant="contained"
-                color="primary"
-              >
-                Menu
-              </Button>
-              <Button
-                onClick={handleClickNewGame}
-                variant="contained"
-                color="primary"
-              >
-                New Game
-              </Button>
-              <Button
-                onClick={handle.enter}
-                variant="contained"
-                color="primary"
-              >
-                FullScreen
-              </Button>
-              <span>Moves: {moves}</span>
+              <div>
+                <Button
+                  onClick={handleClickMenuButton}
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: "10px" }}
+                >
+                  Menu
+                </Button>
+                <Button
+                  onClick={handleClickNewGame}
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: "10px" }}
+                >
+                  New Game
+                </Button>
+                <Button
+                  onClick={handle.enter}
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: "10px" }}
+                >
+                  FullScreen
+                </Button>
+              </div>
+              <div className="controls__bottom">
+                <span>Moves: {moves}</span>
+                <span>
+                  {hours}:{min}:{sec}
+                </span>
+              </div>
             </div>
             <div className="field__container">
               {isMenu && (
