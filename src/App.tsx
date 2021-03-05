@@ -52,6 +52,7 @@ function App() {
   const [moves, setMoves] = useStickyState(0, "moves");
   const [cards, setCards] = useStickyState(initialStateCarts, "cards");
   const [seconds, setSeconds] = useStickyState(0, "seconds");
+
   let hours: any = Math.floor((seconds / 3600) % 24);
   let min: any = Math.floor((seconds / 60) % 60);
   let sec: any = Math.floor(seconds % 60);
@@ -109,7 +110,7 @@ function App() {
   useEffect(() => {
     let timer = setTimeout(() => setSeconds(seconds + 1), 1000);
     return () => clearTimeout(timer);
-  }, [seconds]);
+  }, [seconds, setSeconds]);
 
   useEffect(() => {
     window.addEventListener("resize", resizeField);
@@ -143,7 +144,7 @@ function App() {
 
   useEffect(() => {
     if (solved.length === 16) {
-      setIsStart(false);
+      setIsStart(false); 
     }
   }, [solved.length]);
 

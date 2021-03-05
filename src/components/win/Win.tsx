@@ -4,7 +4,7 @@ import './win.css';
 const Win: FC = () => {
     return (
         <div className="win">
-            Congrats!
+            <span>Congrats!</span>
         </div>
     )
 }
