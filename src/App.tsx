@@ -39,7 +39,7 @@ function App() {
 
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [play] = useSound(buttonSoundUrl, { volume: soundVolume });
-  const [playMusic] = useSound(musicUrl, { volume: musicVolume });
+  const [playMusic] = useSound(musicUrl, { volume: musicVolume, loop: true });
   const [background, setBackground] = useStickyState(
     "linear-gradient(to bottom, #0a081d, #191638, #151527')",
     "background"
@@ -48,10 +48,14 @@ function App() {
     "assets/images/1.png",
     "cardsImage"
   );
+
+  let timer: any;
+
   const [set, setSet] = useStickyState("set1", "cardsSet");
   const [moves, setMoves] = useStickyState(0, "moves");
   const [cards, setCards] = useStickyState(initialStateCarts, "cards");
   const [seconds, setSeconds] = useStickyState(0, "seconds");
+  const [isAutoplay, setAutoplay] = useState(false);
 
   let hours: any = Math.floor((seconds / 3600) % 24);
   let min: any = Math.floor((seconds / 60) % 60);
@@ -59,6 +63,24 @@ function App() {
   if (sec.toString().length === 1) sec = `0${sec}`;
   if (min.toString().length === 1) min = `0${min}`;
   if (hours.toString().length === 1) hours = `0${hours}`;
+
+  const autoplay = () => {
+    setSolved([]);
+    setAutoplay(true);
+    const typesSet = new Set();
+    cards.forEach((card: any) => typesSet.add(card.type));
+    const types = Array.from(typesSet);
+    const result = types.map((type) =>
+      cards.filter((card: any) => card.type === type)
+    );
+    for (let i = 0; i < result.length; i++) {
+      timer = setTimeout(() => {
+        setSolved((solved: any) => {
+          return [...solved, result[i][0].id, result[i][1].id];
+        });
+      }, 1000 * i);
+    }
+  };
 
   const handleChangeMusicValue = (event: any, newValue: any) => {
     setMusicValue(newValue);
@@ -144,11 +166,13 @@ function App() {
 
   useEffect(() => {
     if (solved.length === 16) {
-      setIsStart(false); 
+      setIsStart(false);
+      setAutoplay(false);
     }
   }, [solved.length]);
 
   const handleClick = (id: number) => {
+    console.log(id)
     setDisabled(true);
     setMoves(moves + 1);
     play();
@@ -171,6 +195,8 @@ function App() {
   };
 
   const handleClickNewGame = () => {
+    clearTimeout(timer);
+    setAutoplay(false);
     setCards(initCards());
     setMoves(0);
     setSeconds(0);
@@ -234,7 +260,7 @@ function App() {
                   onClick={handleClickMenuButton}
                   variant="contained"
                   color="primary"
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "10px", marginBottom: '5px' }}
                 >
                   Menu
                 </Button>
@@ -242,7 +268,8 @@ function App() {
                   onClick={handleClickNewGame}
                   variant="contained"
                   color="primary"
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "10px", marginBottom: '5px' }}
+                  disabled={isAutoplay}
                 >
                   New Game
                 </Button>
@@ -250,9 +277,18 @@ function App() {
                   onClick={handle.enter}
                   variant="contained"
                   color="primary"
-                  style={{ marginRight: "10px" }}
+                  style={{ marginRight: "10px", marginBottom: '5px' }}
                 >
                   FullScreen
+                </Button>
+                <Button
+                  onClick={autoplay}
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: "10px", marginBottom: "5px" }}
+                  disabled={isAutoplay}
+                >
+                  Autoplay
                 </Button>
               </div>
               <div className="controls__bottom">
@@ -293,8 +329,8 @@ function App() {
               Ctrl+Z - Menu <br />
               Ctrl+X - New Game <br />
               Ctrl+C - Full Screen <br />
-              Ctrl+V - Sound and Music on <br />
-              Ctrl+B - Sound and Music off
+              Ctrl+V - Sound and Music off <br />
+              Ctrl+B - Sound and Music on
             </p>
           </div>
           <Footer />
