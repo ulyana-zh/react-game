@@ -4,7 +4,7 @@
 
 Для запуска игры:
 
-` $ git clone https://github.com/ulyana-zh/react-game.git -b react-game `
+` $ git clone https://github.com/ulyana-zh/react-game.git
 
 ` $ npm install `
 
