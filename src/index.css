@@ -1,0 +1,62 @@
+body {
+  color: white;
+  text-transform: uppercase;
+  margin: 0;
+  font-family: 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center; 
+  /* background: linear-gradient(to bottom, #0a081d, #191638, #151527); */
+}
+
+.game {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+}
+
+.game__field {
+  width: fit-content;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.controls {
+  padding: 0 10px;
+}
+
+.controls>* {
+  margin-bottom: 10px;
+}
+
+.controls__bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.my-component {
+  background: rgb(226, 16, 16);
+}
+
+.fullscreen-enabled .my-component {
+  background: rgb(199, 13, 13);
+}
